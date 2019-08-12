@@ -63,6 +63,10 @@ var Editor = function ({
         var text = self.selectCurrentBlock(instance)
         console.log('text', text)
         self.eval(text.text)
+      },
+      'Ctrl-S': (instance) => {
+        var text = self.selectCurrentBlock(instance)
+        self.saveSketch(text);
       }
     }
   })
@@ -103,7 +107,21 @@ Editor.prototype.clear = function () {
 }
 
 Editor.prototype.saveSketch = function(code) {
-  console.log('no function for save sketch has been implemented')
+  // console.log('no function for save sketch has been implemented')
+  let date = new Date();
+  let filename = `hydra-${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}-${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}.js`;
+
+  let hydrafile = new Blob([code], {type:'text/js'});
+  console.log("created file: ", filename);
+
+  // create a blob url, anchor element with a downloadable attribute, clicks on it and revokes the url.
+  let url = URL.createObjectURL(hydrafile);
+  let a = document.createElement("a");
+  
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);  
 }
 
 Editor.prototype.shareSketch = function(code) {
