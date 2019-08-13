@@ -75,6 +75,20 @@ var Editor = function ({
   this.cm.refresh()
   this.logElement = document.createElement('div')
   this.logElement.className = "console cm-s-tomorrow-night-eighties"
+
+  container.addEventListener('drop',(e)=>{
+    e.preventDefault();
+    e.stopPropagation();
+    
+    let files;
+    files = Array.from(e.dataTransfer.files);
+    files.forEach((file)=>{
+      if(file.type.startsWith("image/") || file.type.startsWith("video/")){
+        editor.cm.replaceSelection(`"${file.path}"${(files.length>1)? "," : ""}`)
+      }  
+    });
+  })
+
   document.body.appendChild(this.logElement)
 
 
